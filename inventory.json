@@ -1,0 +1,92 @@
+{
+  "wood types": {
+    "Teak": {
+      "price": 250.0
+    },
+    "Plywood": {
+      "price": 120.0
+    },
+    "teak": {
+      "price": 100.05
+    }
+  },
+  "laminate types": {
+    "Matte Laminate": {
+      "price": 75.0
+    },
+    "Glossy Laminate": {
+      "price": 95.0
+    }
+  },
+  "knob types": {
+    "Round Knob": {
+      "price": 35.0
+    },
+    "Square Knob": {
+      "price": 45.0
+    }
+  },
+  "handle types": {
+    "Stainless Handle": {
+      "price": 150.0
+    },
+    "Aluminum Handle": {
+      "price": 120.0
+    }
+  },
+  "acrylic material types": {
+    "Acrylic Gloss": {
+      "price": 300.0
+    }
+  },
+  "mirror types": {
+    "Plain Mirror": {
+      "price": 200.0
+    }
+  },
+  "edge banding types": {
+    "PVC Edge": {
+      "price": 15.0
+    }
+  },
+  "strip light types": {
+    "LED Strip Warm": {
+      "price": 50.0
+    }
+  },
+  "false ceiling types": {
+    "POP": {
+      "price": 40.0
+    }
+  },
+  "granite types": {
+    "Black Granite": {
+      "price": 350.0
+    }
+  },
+  "push magnet types": {
+    "Small Push Magnet": {
+      "price": 20.0
+    }
+  },
+  "channel types": {
+    "Alu Channel": {
+      "price": 70.0
+    }
+  },
+  "profile types": {
+    "Aluminum Profile": {
+      "price": 180.0
+    }
+  },
+  "tv panel types": {
+    "PVC TV Panel": {
+      "price": 250.0
+    }
+  },
+  "profile door types": {
+    "Hinged Profile Door": {
+      "price": 1200.0
+    }
+  }
+}
