@@ -2,6 +2,9 @@ import os
 from typing import Dict, Any
 
 import streamlit as st
+import io
+
+import pandas as pd
 
 from utils import load_inventory, add_material
 
@@ -38,30 +41,9 @@ def sanitize_key(s: str) -> str:
     return s.replace(" ", "_").replace("/", "_")
 
 
-def safe_rerun():
-    """Rerun the Streamlit script. Use experimental_rerun when available, otherwise
-    mutate the query params (a supported way to force a rerun).
-    """
-    try:
-        # preferred method (may not exist in some Streamlit versions)
-        if hasattr(st, "experimental_rerun"):
-            st.experimental_rerun()
-            return
-    except Exception:
-        # fallthrough to query param approach
-        pass
-
-    # fallback: tweak query params to trigger a rerun
-    try:
-        import time
-
-        params = st.experimental_get_query_params() or {}
-        params["_rerun_ts"] = str(time.time())
-        st.experimental_set_query_params(**params)
-    except Exception:
-        # last resort: set a session flag and stop; user action will refresh page
-        st.session_state["_need_rerun"] = not st.session_state.get("_need_rerun", False)
-        st.stop()
+# Note: explicit rerun logic was removed because it caused navigation/hang issues
+# on some Streamlit versions. Widget interactions (button presses) cause Streamlit
+# to rerun the script automatically, so explicit reruns are unnecessary here.
 
 
 def main():
@@ -99,6 +81,12 @@ def main():
                 rows_key = f"rows_count_{sanitize_key(cat)}"
                 count = int(st.session_state.get(rows_key, 1))
 
+                # top bar: show an Add button so it's visible without scrolling
+                top_c1, top_c2 = st.columns([3, 1])
+                with top_c2:
+                    if st.button("+ Add another item", key=f"addrow_top_{sanitize_key(cat)}"):
+                        st.session_state[rows_key] = st.session_state.get(rows_key, 1) + 1
+
                 cols = st.columns([3, 1, 2])
                 for i in range(count):
                     idx = i + 1
@@ -107,16 +95,56 @@ def main():
 
                     with st.container():
                         c1, c2, c3 = st.columns([3, 1, 2])
+                        # ensure any stored selection for this row is still valid for the current options
+                        if sel_key in st.session_state and st.session_state.get(sel_key) not in options:
+                            st.session_state[sel_key] = "-- select --"
+
                         with c1:
                             selection = st.selectbox(f"Type (row {idx})", options, key=sel_key)
                         with c2:
                             qty = st.number_input(f"Qty (row {idx})", min_value=0.0, value=float(st.session_state.get(qty_key, 1.0)), key=qty_key)
                         with c3:
-                            if st.button("Remove", key=f"remove_{sanitize_key(cat)}_{idx}"):
-                                # decrease rows count and shift values
-                                new_count = max(0, st.session_state.get(rows_key, 1) - 1)
-                                st.session_state[rows_key] = new_count
-                                safe_rerun()
+                            # show Remove only when more than one row exists
+                            if count > 1:
+                                if st.button("Remove", key=f"remove_{sanitize_key(cat)}_{idx}"):
+                                    # shift subsequent rows up to fill this gap
+                                    for j in range(idx, count):
+                                        src = j + 1
+                                        dst = j
+                                        sel_src = f"select_{sanitize_key(cat)}_{src}"
+                                        sel_dst = f"select_{sanitize_key(cat)}_{dst}"
+                                        qty_src = f"qty_{sanitize_key(cat)}_{src}"
+                                        qty_dst = f"qty_{sanitize_key(cat)}_{dst}"
+                                        # move selection and qty if present
+                                        if sel_src in st.session_state:
+                                            st.session_state[sel_dst] = st.session_state.get(sel_src)
+                                        else:
+                                            st.session_state.pop(sel_dst, None)
+                                        if qty_src in st.session_state:
+                                            st.session_state[qty_dst] = st.session_state.get(qty_src)
+                                        else:
+                                            st.session_state.pop(qty_dst, None)
+
+                                        # move any other fields (othername/otherprice)
+                                        other_src = f"othername_{sanitize_key(cat)}_{src}"
+                                        other_dst = f"othername_{sanitize_key(cat)}_{dst}"
+                                        otherp_src = f"otherprice_{sanitize_key(cat)}_{src}"
+                                        otherp_dst = f"otherprice_{sanitize_key(cat)}_{dst}"
+                                        if other_src in st.session_state:
+                                            st.session_state[other_dst] = st.session_state.get(other_src)
+                                        else:
+                                            st.session_state.pop(other_dst, None)
+                                        if otherp_src in st.session_state:
+                                            st.session_state[otherp_dst] = st.session_state.get(otherp_src)
+                                        else:
+                                            st.session_state.pop(otherp_dst, None)
+
+                                    # remove last row keys
+                                    last = count
+                                    for k in [f"select_{sanitize_key(cat)}_{last}", f"qty_{sanitize_key(cat)}_{last}", f"othername_{sanitize_key(cat)}_{last}", f"otherprice_{sanitize_key(cat)}_{last}"]:
+                                        st.session_state.pop(k, None)
+
+                                    st.session_state[rows_key] = count - 1
 
                         # If Other is selected, show inputs to add new material and a button to save it
                         if selection == "Other":
@@ -134,12 +162,10 @@ def main():
                                     new_opt = pretty_option(other_name.strip(), float(other_price))
                                     st.session_state[sel_key] = new_opt
                                     st.session_state[qty_key] = float(qty)
-                                    safe_rerun()
 
                 st.markdown("---")
                 if st.button(f"Add row to {cat}", key=f"addrow_{sanitize_key(cat)}"):
                     st.session_state[rows_key] = st.session_state.get(rows_key, 1) + 1
-                    safe_rerun()
 
     # after UI, build items_selected from per-row selections
     inventory = load_inventory()
@@ -196,6 +222,60 @@ def main():
             "total": total,
         }
         st.download_button("Download estimate (JSON)", data=json.dumps(export, indent=2, ensure_ascii=False), file_name=f"estimate_{project_name.replace(' ','_')}.json", mime="application/json")
+
+        # Excel export (XLSX)
+        def generate_excel(project: str, client_name: str, notes: str, items: list, total_amount: float) -> bytes:
+            # Build DataFrame
+            if items:
+                df = pd.DataFrame(items)
+                # ensure columns exist
+                df = df.rename(columns={
+                    "category": "Category",
+                    "name": "Material",
+                    "qty": "Qty",
+                    "price": "Unit Price (Rs)",
+                })
+                if "Qty" not in df.columns:
+                    df["Qty"] = 0
+                if "Unit Price (Rs)" not in df.columns:
+                    df["Unit Price (Rs)"] = 0.0
+                df["Line Total (Rs)"] = df["Qty"] * df["Unit Price (Rs)"]
+                # reorder
+                df = df[["Category", "Material", "Qty", "Unit Price (Rs)", "Line Total (Rs)"]]
+            else:
+                df = pd.DataFrame(columns=["Category", "Material", "Qty", "Unit Price (Rs)", "Line Total (Rs)"])
+
+            # append a final total row
+            total_row = {"Category": "", "Material": "", "Qty": "", "Unit Price (Rs)": "Total:", "Line Total (Rs)": f"{total_amount:.2f}"}
+            df_total = pd.concat([df, pd.DataFrame([total_row])], ignore_index=True)
+
+            buffer = io.BytesIO()
+            with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+                df_total.to_excel(writer, sheet_name="Estimate", index=False)
+                # autosize columns (simple approach)
+                ws = writer.book.worksheets[0]
+                for col in ws.columns:
+                    max_length = 0
+                    col_letter = col[0].column_letter
+                    for cell in col:
+                        try:
+                            v = str(cell.value)
+                        except Exception:
+                            v = ""
+                        if v:
+                            max_length = max(max_length, len(v))
+                    adjusted_width = (max_length + 2)
+                    ws.column_dimensions[col_letter].width = adjusted_width
+
+            excel_bytes = buffer.getvalue()
+            buffer.close()
+            return excel_bytes
+
+        try:
+            xlsx_bytes = generate_excel(project_name, client, note, items_selected, total)
+            st.download_button("Download estimate (XLSX)", data=xlsx_bytes, file_name=f"estimate_{project_name.replace(' ','_')}.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        except Exception as e:
+            st.error(f"Excel generation failed: {e}")
     else:
         st.info("No materials selected yet. Use the panels above to select or add materials.")
 
