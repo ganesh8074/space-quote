@@ -1,0 +1,183 @@
+{
+  "materials": [
+    {
+      "id": "ply_premium",
+      "name": "MR Ply (Premium)",
+      "grade": "Premium",
+      "rate_per_sft": 950
+    },
+    {
+      "id": "ply_standard",
+      "name": "MR Ply (Standard)",
+      "grade": "Standard",
+      "rate_per_sft": 650
+    },
+    {
+      "id": "ply_basic",
+      "name": "MR Ply (Basic)",
+      "grade": "Basic",
+      "rate_per_sft": 420
+    },
+    {
+      "id": "lam_premium",
+      "name": "Laminate (Premium)",
+      "grade": "Premium",
+      "rate_per_sft": 350
+    },
+    {
+      "id": "lam_standard",
+      "name": "Laminate (Standard)",
+      "grade": "Standard",
+      "rate_per_sft": 220
+    },
+    {
+      "id": "lam_basic",
+      "name": "Laminate (Basic)",
+      "grade": "Basic",
+      "rate_per_sft": 150
+    },
+    {
+      "id": "block_premium",
+      "name": "Block Board (Premium)",
+      "grade": "Premium",
+      "rate_per_sft": 880
+    },
+    {
+      "id": "block_standard",
+      "name": "Block Board (Standard)",
+      "grade": "Standard",
+      "rate_per_sft": 600
+    },
+    {
+      "id": "block_basic",
+      "name": "Block Board (Basic)",
+      "grade": "Basic",
+      "rate_per_sft": 380
+    },
+    {
+      "id": "hdhmr_premium",
+      "name": "HDHMR (Premium)",
+      "grade": "Premium",
+      "rate_per_sft": 720
+    },
+    {
+      "id": "hdhmr_standard",
+      "name": "HDHMR (Standard)",
+      "grade": "Standard",
+      "rate_per_sft": 520
+    },
+    {
+      "id": "hdhmr_basic",
+      "name": "HDHMR (Basic)",
+      "grade": "Basic",
+      "rate_per_sft": 350
+    },
+    {
+      "id": "hardware_std",
+      "name": "Hardware (Standard)",
+      "grade": "Standard",
+      "rate_per_sft": 80
+    },
+    {
+      "id": "hardware_premium",
+      "name": "Hardware (Premium)",
+      "grade": "Premium",
+      "rate_per_sft": 120
+    },
+    {
+      "id": "back_6mm",
+      "name": "Back 6mm MR Ply",
+      "grade": "Standard",
+      "rate_per_sft": 45
+    },
+    {
+      "id": "bwp_ply_std",
+      "name": "BWP PLY Standard",
+      "grade": "Standard",
+      "rate_per_sft": 90
+    }
+  ],
+  "item_defaults": {
+    "Tv Unit Full Wall Panel": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Tv Unit Vertical Box": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Tv Unit Base Box": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Pooja Mandir": [
+      "ply_standard",
+      "lam_standard"
+    ],
+    "Base Box": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std",
+      "back_6mm"
+    ],
+    "Loft": [
+      "ply_standard",
+      "lam_standard",
+      "back_6mm"
+    ],
+    "Middle Box": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Tall Unit": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std",
+      "back_6mm"
+    ],
+    "Wardrobe": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std",
+      "back_6mm"
+    ],
+    "Wardrobe Loft": [
+      "ply_standard",
+      "lam_standard",
+      "back_6mm"
+    ],
+    "Wardrobe + Study": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std",
+      "back_6mm"
+    ],
+    "Study": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Dressing Table": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Partition": [
+      "ply_standard",
+      "lam_standard"
+    ],
+    "Workstation": [
+      "ply_standard",
+      "lam_standard",
+      "hardware_std"
+    ],
+    "Other": [
+      "ply_standard",
+      "lam_standard"
+    ]
+  }
+}

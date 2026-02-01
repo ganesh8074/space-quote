@@ -1,0 +1,89 @@
+[
+  {
+    "id": "120bd464",
+    "project_name": "111",
+    "location": "111dfsaf",
+    "margin_pct": 20.0,
+    "discount_pct": 10.0,
+    "quote_date": "2026-02-01",
+    "validity": "30 days",
+    "woodwork_rows": [
+      {
+        "Room": "Living Room",
+        "Item": "Tv Unit Full Wall Panel",
+        "Measurements In Feet": "6.0\u00d710.0",
+        "Total Sft": 60.0,
+        "Materials": "MR Ply (Premium), Block Board (Premium), HDHMR (Premium), Hardware (Premium), Laminate (Premium)",
+        "Grade": "Premium",
+        "Per Sft Price": 3020.0,
+        "Price Per Unit": 181200.0
+      }
+    ],
+    "ceiling_rows": [
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      },
+      {
+        "Place": "Living Room",
+        "Measurements In Feet": "11.0\u00d717.0",
+        "Total Sft": 187.0,
+        "Per Sft Price": 25,
+        "Price Per Unit": 4675.0
+      }
+    ],
+    "updated_at": "2026-02-01 12:27"
+  }
+]
